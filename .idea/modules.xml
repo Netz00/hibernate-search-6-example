@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Hibernate-Search-6-Example.iml" filepath="$PROJECT_DIR$/.idea/Hibernate-Search-6-Example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/hibernate-search-6-example.iml" filepath="$PROJECT_DIR$/backend/hibernate-search-6-example.iml" />
+    </modules>
+  </component>
+</project>
