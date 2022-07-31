@@ -1,0 +1,21 @@
+version: "3.7"
+
+networks:
+  benetwork:
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hibernate
+    volumes:
+      - ./database/create-schema:/docker-entrypoint-initdb.d/:z
+      - ./database/data:/var/lib/postgresql/data:z
+    ports:
+      - "9500:5432"
+    networks:
+      - benetwork
+
