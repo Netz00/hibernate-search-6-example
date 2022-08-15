@@ -1,0 +1,38 @@
+bin
+tmp
+target
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IDE ###
+.idea
+*.iws
+*.iml
+*.ipr
+.metadata/
+.recommenders/
+.settings/
+.vscode
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+## Package Files ##
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar

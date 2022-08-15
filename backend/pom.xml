@@ -14,7 +14,7 @@
 	<name>hibernate-search-6-example</name>
 	<description>Demo project for Hibernate Search 6</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
