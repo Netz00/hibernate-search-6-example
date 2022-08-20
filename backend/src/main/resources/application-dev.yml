@@ -6,7 +6,7 @@ spring:
     jpa:
       properties:
         hibernate:
-          ddl-auto: create
+          ddl-auto: create-drop
           format_sql: true
       show-sql: true
 
