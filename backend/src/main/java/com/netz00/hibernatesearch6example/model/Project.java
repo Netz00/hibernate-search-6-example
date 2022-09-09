@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,11 +14,11 @@ import java.util.Set;
 @ToString
 @Getter
 @Setter
-@Table(name = "client",
+@Table(name = "project",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        columnNames = "username",
-                        name = "unq_username")
+                        columnNames = "name",
+                        name = "unq_name")
         }
 )
 public class Client {
@@ -28,16 +29,17 @@ public class Client {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "last_name")
-    private String lastName;
+    @Setter(AccessLevel.NONE)
+    @Column(name = "date_created")
+    private Date dateCreated = new Date();
 
-    @ManyToMany(mappedBy = "clients")
-    @JsonIgnoreProperties(value = {"clients"})
+    @ManyToMany(mappedBy = "projects")
+    @JsonIgnoreProperties(value = {"projects"})
     private Set<Freelancer> freelancers = new HashSet<>();
 }

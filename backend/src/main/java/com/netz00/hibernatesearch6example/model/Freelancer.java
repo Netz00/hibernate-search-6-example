@@ -38,11 +38,11 @@ public class Freelancer {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Set<Comment> comments = new HashSet<>();
 
     // Unidirectional
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "freelancer_categories", joinColumns = @JoinColumn(name = "freelancer_id"), inverseJoinColumns = @JoinColumn(name = "categories_id"))
     private Set<Category> categories = new HashSet<>();
 
@@ -50,7 +50,30 @@ public class Freelancer {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "freelancer_clients", joinColumns = @JoinColumn(name = "freelancer_id"), inverseJoinColumns = @JoinColumn(name = "client_id"))
     @JsonIgnoreProperties(value = {"freelancers"}, allowSetters = true)
-    private Set<Client> clients = new HashSet<>();
+    private Set<Client> projects = new HashSet<>();
+
+
+    public Freelancer addComment(Comment comment) {
+        comments.add(comment);
+        return this;
+    }
+
+
+
+    public Freelancer removeComment(Comment comment) {
+        comments.remove(comment);
+        return this;
+    }
+
+    public Freelancer addCategory(Category category) {
+        categories.add(category);
+        return this;
+    }
+
+    public Freelancer removeCategory(Category category) {
+        categories.remove(category);
+        return this;
+    }
 
 }
 
