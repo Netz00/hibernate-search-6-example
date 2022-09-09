@@ -21,7 +21,7 @@ import java.util.Set;
                         name = "unq_name")
         }
 )
-public class Client {
+public class Project {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

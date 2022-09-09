@@ -14,13 +14,7 @@ import java.util.Set;
 @ToString
 @Getter
 @Setter
-@Table(name = "freelancer",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames = "username",
-                        name = "unq_username")
-        }
-)
+@Table(name = "freelancer", uniqueConstraints = {@UniqueConstraint(columnNames = "username", name = "unq_username")})
 public class Freelancer {
 
     @Id
@@ -38,7 +32,7 @@ public class Freelancer {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Comment> comments = new HashSet<>();
 
     // Unidirectional
@@ -47,18 +41,15 @@ public class Freelancer {
     private Set<Category> categories = new HashSet<>();
 
     // Bidirectional
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "freelancer_clients", joinColumns = @JoinColumn(name = "freelancer_id"), inverseJoinColumns = @JoinColumn(name = "client_id"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "freelancer_projects", joinColumns = @JoinColumn(name = "freelancer_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
     @JsonIgnoreProperties(value = {"freelancers"}, allowSetters = true)
-    private Set<Client> projects = new HashSet<>();
-
+    private Set<Project> projects = new HashSet<>();
 
     public Freelancer addComment(Comment comment) {
         comments.add(comment);
         return this;
     }
-
-
 
     public Freelancer removeComment(Comment comment) {
         comments.remove(comment);
