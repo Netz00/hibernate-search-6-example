@@ -25,6 +25,6 @@ public class ProjectDTO {
     private Date dateCreated;
 
     @JsonProperty("freelancers")
-    private Set<FreelancerDTO> freelancerDTOS = new HashSet<>();
+    private Set<FreelancerDTO> freelancers = new HashSet<>();
 
 }

@@ -25,11 +25,11 @@ public class FreelancerDTO {
     private String lastName;
 
     @JsonProperty("comments")
-    private Set<CommentDTO> commentDTOS = new HashSet<>();
+    private Set<CommentDTO> comments = new HashSet<>();
 
     @JsonProperty("categories")
-    private Set<CategoryDTO> categoryDTOS = new HashSet<>();
+    private Set<CategoryDTO> categories = new HashSet<>();
 
     @JsonProperty("projects")
-    private Set<ProjectDTO> projectDTOS = new HashSet<>();
+    private Set<ProjectDTO> projects = new HashSet<>();
 }
