@@ -4,6 +4,7 @@ import com.netz00.hibernatesearch6example.model.Comment;
 import com.netz00.hibernatesearch6example.model.Freelancer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
+
+    @Override
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            attributePaths = {
+                    "categories"
+            }
+    )
+    Page<Freelancer> findAll(Pageable pageable);
 
 
     /**
