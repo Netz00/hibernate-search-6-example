@@ -3,10 +3,11 @@ spring:
     url: jdbc:postgresql://localhost:9500/hibernate
     username: postgres
     password: postgres
-    jpa:
-      properties:
-        hibernate:
-          ddl-auto: create-drop
-          format_sql: true
-      show-sql: true
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        ddl-auto: create-drop
+        format_sql: true
+
 

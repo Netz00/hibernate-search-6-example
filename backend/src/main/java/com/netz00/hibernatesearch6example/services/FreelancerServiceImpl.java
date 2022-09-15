@@ -47,7 +47,7 @@ public class FreelancerServiceImpl implements FreelancerService {
     @Transactional(readOnly = true)
     public Page<FreelancerDTO> findAll(Pageable pageable) {
 
-        return freelancerRepository.findAll(pageable).map(freelancerMapper::toDto);
+        return freelancerRepository.findAll(pageable).map(freelancerMapper::toDtoRemoveCommentsAndProjects);
     }
 
     @Override

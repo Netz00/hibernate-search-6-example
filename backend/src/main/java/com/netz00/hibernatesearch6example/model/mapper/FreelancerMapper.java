@@ -4,6 +4,7 @@ import com.netz00.hibernatesearch6example.dto.FreelancerDTO;
 import com.netz00.hibernatesearch6example.model.Freelancer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 
 /**
@@ -16,6 +17,11 @@ public interface FreelancerMapper extends EntityMapper<FreelancerDTO, Freelancer
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "projects", ignore = true)
     Freelancer toEntity(FreelancerDTO freelancerDTO);
+
+    @Named("removeCommentsAndProjects")
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "projects", ignore = true)
+    FreelancerDTO toDtoRemoveCommentsAndProjects(Freelancer freelancer);
 
 }
 
