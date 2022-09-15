@@ -1,16 +1,16 @@
 package com.netz00.hibernatesearch6example.services.api;
 
-import com.netz00.hibernatesearch6example.model.Project;
+import com.netz00.hibernatesearch6example.dto.ProjectDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProjectService {
 
 
-    Page<Project> findAll(Pageable pageable);
+    Page<ProjectDTO> findAll(Pageable pageable);
 
 
-    Project save(Project project);
+    ProjectDTO save(ProjectDTO project);
 
-    Project delete(Long id);
+    ProjectDTO delete(Long id);
 }

@@ -4,7 +4,6 @@ package com.netz00.hibernatesearch6example.controller;
 import com.netz00.hibernatesearch6example.controller.endpoints.RestEndpoints;
 import com.netz00.hibernatesearch6example.controller.endpoints.RestEndpointsParameters;
 import com.netz00.hibernatesearch6example.dto.ProjectDTO;
-import com.netz00.hibernatesearch6example.model.mapper.ProjectMapper;
 import com.netz00.hibernatesearch6example.services.api.ProjectService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,27 +20,25 @@ import javax.validation.Valid;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final ProjectMapper projectMapper;
 
-    public ProjectController(ProjectService projectService, ProjectMapper projectMapper) {
+    public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-        this.projectMapper = projectMapper;
     }
 
     @GetMapping()
     public ResponseEntity<Page<ProjectDTO>> getAllProjects(Pageable pageable) {
-        return new ResponseEntity<>(projectService.findAll(pageable).map(projectMapper::toDto), HttpStatus.OK);
+        return new ResponseEntity<>(projectService.findAll(pageable), HttpStatus.OK);
     }
 
     @PostMapping()
     public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
 
-        return new ResponseEntity<>(projectMapper.toDto(projectService.save(projectMapper.toEntity(projectDTO))), HttpStatus.CREATED);
+        return new ResponseEntity<>(projectService.save(projectDTO), HttpStatus.CREATED);
     }
 
     @DeleteMapping(RestEndpointsParameters.PROJECT_ID)
     public ResponseEntity<ProjectDTO> deleteProject(@PathVariable("projectId") final Long id) {
-        return new ResponseEntity<>(projectMapper.toDto(projectService.delete(id)), HttpStatus.OK);
+        return new ResponseEntity<>(projectService.delete(id), HttpStatus.OK);
     }
 
 

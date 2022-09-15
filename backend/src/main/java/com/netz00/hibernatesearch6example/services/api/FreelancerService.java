@@ -1,32 +1,32 @@
 package com.netz00.hibernatesearch6example.services.api;
 
-import com.netz00.hibernatesearch6example.model.Category;
-import com.netz00.hibernatesearch6example.model.Comment;
-import com.netz00.hibernatesearch6example.model.Freelancer;
+import com.netz00.hibernatesearch6example.dto.CategoryDTO;
+import com.netz00.hibernatesearch6example.dto.CommentDTO;
+import com.netz00.hibernatesearch6example.dto.FreelancerDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface FreelancerService {
 
 
-    Page<Freelancer> findAll(Pageable pageable);
+    Page<FreelancerDTO> findAll(Pageable pageable);
 
-    Freelancer save(Freelancer category);
+    FreelancerDTO save(FreelancerDTO category);
 
-    Freelancer delete(Long id);
-
-
-    Comment saveComment(Long id, Comment comment);
-
-    Page<Comment> findAllComments(Long id, Pageable pageable);
-
-    Comment deleteComment(Long id, Long commentId);
-
-    Comment patchComment(Long commentId, Comment comment);
+    FreelancerDTO delete(Long id);
 
 
-    Category addCategory(Long id, Long categoryId);
+    CommentDTO saveComment(Long id, CommentDTO comment);
 
-    Category removeCategory(Long id, Long categoryId);
+    Page<CommentDTO> findAllComments(Long id, Pageable pageable);
+
+    CommentDTO deleteComment(Long id, Long commentId);
+
+    CommentDTO patchComment(Long commentId, CommentDTO comment);
+
+
+    CategoryDTO addCategory(Long id, Long categoryId);
+
+    CategoryDTO removeCategory(Long id, Long categoryId);
 
 }
