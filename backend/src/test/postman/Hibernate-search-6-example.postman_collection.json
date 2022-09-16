@@ -1,0 +1,773 @@
+{
+	"info": {
+		"_postman_id": "303af0cc-01f6-4956-9cab-e017191ac24b",
+		"name": "Hibernate-search-6-example",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21386216"
+	},
+	"item": [
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Create Category",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"new_category_title\", pm.variables.replaceIn('{{$randomJobType}}'));",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const schema = {",
+									"   \"id\": \"number\",",
+									"    \"title\": \"string\"",
+									"};",
+									"pm.test('Schema is valid', function() {",
+									"  pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Test data type of the response\", () => {",
+									"    pm.expect(jsonData).to.be.an(\"object\");",
+									"    pm.expect(jsonData.id).to.be.a(\"number\");",
+									"    pm.expect(jsonData.title).to.be.a(\"string\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Category added correctly\", () => {",
+									"    pm.expect(jsonData.title).to.eql(pm.environment.get(\"new_category_title\"));",
+									"});",
+									"",
+									"if(pm.environment.get(\"environmentName\")==='test'){",
+									"",
+									"    pm.environment.set(\"new_category_id\", jsonData.id);",
+									"        pm.environment.set(\"new_category_status\", 'CREATED');",
+									"",
+									"    postman.setNextRequest(\"Get All Categories\");",
+									"}",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"{{new_category_title}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/category",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"var schema = {",
+									"    \"type\": \"array\",",
+									"    \"items\": [ {",
+									"       \"id\": \"number\",",
+									"        \"title\": \"string\"",
+									"    }]",
+									"};",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"",
+									"if(pm.environment.get(\"environmentName\")==='test'){",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"    const newCategory = {",
+									"        id:pm.environment.get(\"new_category_id\"), ",
+									"        title: pm.environment.get(\"new_category_title\")",
+									"    };",
+									"",
+									"    switch (pm.environment.get(\"new_category_status\")){",
+									"        case 'CREATED':",
+									"            pm.test(\"Added Category found\", () => {",
+									"                pm.expect(jsonData.find(category => category.id === newCategory.id).title).to.eql(newCategory.title);",
+									"            });",
+									"            postman.setNextRequest(\"Delete Category\");",
+									"            break;",
+									"        case 'DELETED':",
+									"            pm.test(\"Deleted Category not found\", () => {",
+									"            pm.expect(jsonData.find(category => category.id === newCategory.id)).to.be.undefined;",
+									"            });",
+									"            postman.setNextRequest(null);",
+									"            break;",
+									"        default:",
+									"        break;",
+									"    }",
+									"",
+									"}",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/category",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const schema = {",
+									"   \"id\": \"number\",",
+									"    \"title\": \"string\"",
+									"};",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"  pm.response.to.have.jsonSchema(schema);",
+									"});",
+									"",
+									"if(pm.environment.get(\"environmentName\")==='test'){",
+									"",
+									"    pm.environment.set(\"new_category_status\", 'DELETED');",
+									"",
+									"    postman.setNextRequest(\"Get All Categories\");",
+									"",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/category/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{new_category_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/project?page=0&size=20&sort=name,desc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"project"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"description": "page number"
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"description": "page size"
+								},
+								{
+									"key": "sort",
+									"value": "name,desc",
+									"description": "property name, asc/desc ordering"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomJobTitle}}\",\n    \"description\": \"{{$randomLoremSentence}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/project",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Project",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"{{$randomJobType}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/project/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"project",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "953"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Freelancer",
+			"item": [
+				{
+					"name": "Comment",
+					"item": [
+						{
+							"name": "Get All Comments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/v1/api/freelancer/:id/comment?page=0&size=40",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"freelancer",
+										":id",
+										"comment"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"description": "page number"
+										},
+										{
+											"key": "size",
+											"value": "40",
+											"description": "page size"
+										},
+										{
+											"key": "sort",
+											"value": "firstName,desc",
+											"description": "property name, asc/desc ordering",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "554"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Comment",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"value\": \"{{$randomLoremParagraph}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/api/freelancer/:id/comment",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"freelancer",
+										":id",
+										"comment"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "554"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Patch Comment",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"value\": \"{{$randomLoremParagraph}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/api/freelancer/:id/comment/:commentId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"freelancer",
+										":id",
+										"comment",
+										":commentId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "552"
+										},
+										{
+											"key": "commentId",
+											"value": "1202"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Comment",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"{{$randomJobType}}\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/api/freelancer/:id/comment/:commentId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"freelancer",
+										":id",
+										"comment",
+										":commentId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "552"
+										},
+										{
+											"key": "commentId",
+											"value": "1202"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Category",
+					"item": [
+						{
+							"name": "Add Category",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/api/freelancer/:id/category/:categoryId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"freelancer",
+										":id",
+										"category",
+										":categoryId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "554"
+										},
+										{
+											"key": "categoryId",
+											"value": "410"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Category",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/api/freelancer/:id/category/:categoryId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"freelancer",
+										":id",
+										"category",
+										":categoryId"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "552"
+										},
+										{
+											"key": "categoryId",
+											"value": "408"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get All Freelancers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/freelancer?page=0&size=30&sort=firstName,asc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"freelancer"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"description": "page number"
+								},
+								{
+									"key": "size",
+									"value": "30",
+									"description": "page size"
+								},
+								{
+									"key": "sort",
+									"value": "firstName,asc",
+									"description": "property name, asc/desc ordering"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Freelancer",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/freelancer/554",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"freelancer",
+								"554"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Freelancer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{$randomUserName}}\",\n    \"firstName\": \"{{$randomFirstName}}\",\n    \"lastName\": \"{{$randomLastName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/freelancer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"freelancer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Freelancer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"{{$randomJobType}}\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/v1/api/freelancer/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"v1",
+								"api",
+								"freelancer",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "552"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Response time is less than 200ms\", () => {",
+					"  pm.expect(pm.response.responseTime).to.be.below(200);",
+					"});",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}
