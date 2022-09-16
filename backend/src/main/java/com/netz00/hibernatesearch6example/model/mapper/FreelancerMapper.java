@@ -10,13 +10,18 @@ import org.mapstruct.Named;
 /**
  * Mapper for the entity {@link Freelancer} and its DTO {@link FreelancerDTO}.
  */
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class, CommentMapper.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class, CommentMapper.class, ProjectMapper.class})
 public interface FreelancerMapper extends EntityMapper<FreelancerDTO, Freelancer> {
 
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "projects", ignore = true)
     Freelancer toEntity(FreelancerDTO freelancerDTO);
+
+    @Override
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "projects", qualifiedByName = "noFreelancers")
+    FreelancerDTO toDto(Freelancer entity);
 
     @Named("removeCommentsAndProjects")
     @Mapping(target = "comments", ignore = true)

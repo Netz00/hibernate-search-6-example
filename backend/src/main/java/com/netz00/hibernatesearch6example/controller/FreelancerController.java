@@ -6,6 +6,7 @@ import com.netz00.hibernatesearch6example.controller.endpoints.RestEndpointsPara
 import com.netz00.hibernatesearch6example.dto.CategoryDTO;
 import com.netz00.hibernatesearch6example.dto.CommentDTO;
 import com.netz00.hibernatesearch6example.dto.FreelancerDTO;
+import com.netz00.hibernatesearch6example.dto.ProjectDTO;
 import com.netz00.hibernatesearch6example.services.api.FreelancerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,11 @@ public class FreelancerController {
     @GetMapping()
     public ResponseEntity<Page<FreelancerDTO>> getAllFreelancers(Pageable pageable) {
         return new ResponseEntity<>(freelancerService.findAll(pageable), HttpStatus.OK);
+    }
+
+    @GetMapping(RestEndpointsParameters.FREELANCER_ID)
+    public ResponseEntity<FreelancerDTO> getFreelancer(@PathVariable("id") final Long id) {
+        return new ResponseEntity<>(freelancerService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping()
@@ -85,22 +91,20 @@ public class FreelancerController {
     }
 
 
-
-    /*
     // --------------------- PROJECT ---------------------
 
-    @PostMapping(RestEndpointsParameters.FREELANCER_ID + RestEndpoints.API_FREELANCER_CLIENT + RestEndpointsParameters.CLIENT_ID)
-    public ResponseEntity<ClientDTO> addFreelancerClient(@PathVariable("id") final Long id, @PathVariable("clientId") final Long clientId) {
+    @PostMapping(RestEndpointsParameters.FREELANCER_ID + RestEndpoints.API_FREELANCER_PROJECT + RestEndpointsParameters.PROJECT_ID)
+    public ResponseEntity<ProjectDTO> addFreelancerProject(@PathVariable("id") final Long id, @PathVariable("projectId") final Long projectId) {
 
-        return new ResponseEntity<>(clientMapper.toDto(freelancerService.addClient(id, clientId)), HttpStatus.CREATED);
+        return new ResponseEntity<>(freelancerService.addProject(id, projectId), HttpStatus.CREATED);
     }
 
 
-    @DeleteMapping(RestEndpointsParameters.FREELANCER_ID + RestEndpoints.API_FREELANCER_CLIENT + RestEndpointsParameters.CLIENT_ID)
-    public ResponseEntity<ClientDTO> removeFreelancerClient(@PathVariable("id") final Long id, @PathVariable("clientId") final Long clientId) {
+    @DeleteMapping(RestEndpointsParameters.FREELANCER_ID + RestEndpoints.API_FREELANCER_PROJECT + RestEndpointsParameters.PROJECT_ID)
+    public ResponseEntity<ProjectDTO> removeFreelancerProject(@PathVariable("id") final Long id, @PathVariable("projectId") final Long projectId) {
 
-        return new ResponseEntity<>(clientMapper.toDto(freelancerService.removeClient(id, clientId)), HttpStatus.OK);
+        return new ResponseEntity<>(freelancerService.removeProject(id, projectId), HttpStatus.OK);
     }
-*/
+
 
 }

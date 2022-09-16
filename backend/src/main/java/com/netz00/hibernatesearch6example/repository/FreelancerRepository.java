@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
 
@@ -22,6 +24,15 @@ public interface FreelancerRepository extends JpaRepository<Freelancer, Long> {
     )
     Page<Freelancer> findAll(Pageable pageable);
 
+    @Override
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            attributePaths = {
+                    "categories",
+                    "projects"
+            }
+    )
+    Optional<Freelancer> findById(Long aLong);
 
     /**
      * Paged fetching child entities (comments) over parent (freelancer)

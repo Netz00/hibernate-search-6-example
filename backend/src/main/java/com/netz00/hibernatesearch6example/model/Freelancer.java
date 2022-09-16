@@ -66,5 +66,14 @@ public class Freelancer {
         return this;
     }
 
+    public Freelancer addProject(Project project) {
+        projects.add(project);
+        return this;
+    }
+
+    public Freelancer removeProject(Project project) {
+        projects.remove(project);
+        return this;
+    }
 }
 

@@ -3,16 +3,20 @@ package com.netz00.hibernatesearch6example.services;
 import com.netz00.hibernatesearch6example.dto.CategoryDTO;
 import com.netz00.hibernatesearch6example.dto.CommentDTO;
 import com.netz00.hibernatesearch6example.dto.FreelancerDTO;
+import com.netz00.hibernatesearch6example.dto.ProjectDTO;
 import com.netz00.hibernatesearch6example.exceptions.ResourceNotFoundException;
 import com.netz00.hibernatesearch6example.model.Category;
 import com.netz00.hibernatesearch6example.model.Comment;
 import com.netz00.hibernatesearch6example.model.Freelancer;
+import com.netz00.hibernatesearch6example.model.Project;
 import com.netz00.hibernatesearch6example.model.mapper.CategoryMapper;
 import com.netz00.hibernatesearch6example.model.mapper.CommentMapper;
 import com.netz00.hibernatesearch6example.model.mapper.FreelancerMapper;
+import com.netz00.hibernatesearch6example.model.mapper.ProjectMapper;
 import com.netz00.hibernatesearch6example.repository.CategoryRepository;
 import com.netz00.hibernatesearch6example.repository.CommentRepository;
 import com.netz00.hibernatesearch6example.repository.FreelancerRepository;
+import com.netz00.hibernatesearch6example.repository.ProjectRepository;
 import com.netz00.hibernatesearch6example.services.api.FreelancerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,21 +30,22 @@ public class FreelancerServiceImpl implements FreelancerService {
     private final FreelancerRepository freelancerRepository;
     private final CommentRepository commentRepository;
     private final CategoryRepository categoryRepository;
+    private final ProjectRepository projectRepository;
 
     private final FreelancerMapper freelancerMapper;
-
     private final CommentMapper commentMapper;
-
     private final CategoryMapper categoryMapper;
+    private final ProjectMapper projectMapper;
 
-
-    public FreelancerServiceImpl(FreelancerRepository freelancerRepository, CommentRepository commentRepository, CategoryRepository categoryRepository, FreelancerMapper freelancerMapper, CommentMapper commentMapper, CategoryMapper categoryMapper) {
+    public FreelancerServiceImpl(FreelancerRepository freelancerRepository, CommentRepository commentRepository, CategoryRepository categoryRepository, ProjectRepository projectRepository, FreelancerMapper freelancerMapper, CommentMapper commentMapper, CategoryMapper categoryMapper, ProjectMapper projectMapper) {
         this.freelancerRepository = freelancerRepository;
         this.commentRepository = commentRepository;
         this.categoryRepository = categoryRepository;
+        this.projectRepository = projectRepository;
         this.freelancerMapper = freelancerMapper;
         this.commentMapper = commentMapper;
         this.categoryMapper = categoryMapper;
+        this.projectMapper = projectMapper;
     }
 
     @Override
@@ -48,6 +53,13 @@ public class FreelancerServiceImpl implements FreelancerService {
     public Page<FreelancerDTO> findAll(Pageable pageable) {
 
         return freelancerRepository.findAll(pageable).map(freelancerMapper::toDtoRemoveCommentsAndProjects);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public FreelancerDTO findById(Long id) {
+
+        return freelancerMapper.toDto(freelancerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Freelancer not found with id :" + id)));
     }
 
     @Override
@@ -123,6 +135,28 @@ public class FreelancerServiceImpl implements FreelancerService {
         freelancer.removeCategory(category);
 
         return categoryMapper.toDto(category);
+    }
+
+    // --------------------- PROJECTS ---------------------
+
+    @Override
+    public ProjectDTO addProject(Long id, Long projectId) {
+
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found with id :" + id));
+        Freelancer freelancer = freelancerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Freelancer not found with id :" + id));
+        freelancer.addProject(project);
+
+        return projectMapper.toDtoWithoutFreelancers(project);
+    }
+
+    @Override
+    public ProjectDTO removeProject(Long id, Long projectId) {
+
+        Project project = projectRepository.findById(projectId).orElseThrow(() -> new ResourceNotFoundException("Project not found with id :" + id));
+        Freelancer freelancer = freelancerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Freelancer not found with id :" + id));
+        freelancer.removeProject(project);
+
+        return projectMapper.toDtoWithoutFreelancers(project);
     }
 
 }
