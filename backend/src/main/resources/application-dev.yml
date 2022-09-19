@@ -17,3 +17,7 @@ spring:
             password: admin
           schema_management:
             strategy: drop-and-create
+
+cron-expression:
+  # Cron scheduler task for mass indexing Elasticsearch - every 50 seconds starting at :00 second after the minute
+  mass-indexer: "*/50 * * * * ?"
