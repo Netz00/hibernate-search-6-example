@@ -9,5 +9,11 @@ spring:
       hibernate:
         ddl-auto: create-drop
         format_sql: true
-
-
+        search:
+          backend:
+            hosts: localhost:9200
+            protocol: http
+            username: elastic
+            password: admin
+          schema_management:
+            strategy: drop-and-create
