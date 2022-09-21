@@ -103,6 +103,45 @@ public class ProjectServiceImpl implements ProjectService {
         return new PageImpl<>(projectDTOS, paging, totalHitCount);
     }
 
+    /**
+     * Same as previous but without using Projections
+     *
+     * @param query
+     * @param sort
+     * @param ascending
+     * @param page
+     * @param size
+     * @return
+     */
+    @Override
+    public Page<ProjectDTO> searchProjectsEntities(String query, ProjectSort sort, Boolean ascending, int page, int size) {
+
+        int length = query.length();
+
+        SearchSession searchSession = Search.session(entityManager);
+
+        SearchResult<Project> result = searchSession.search(Project.class)
+                .where(f -> f.match()
+                        .fields("name")
+                        .matching(query)
+                        .fuzzy(length > 3 ? 1 : 0))      // if query longer than 3 chars allow fuzzy for the edit distance of 1
+                .sort(sort == null ?
+                        f -> f.score()
+                        :
+                        f -> ascending ?
+                                f.field(sort.toString().toLowerCase())
+                                :
+                                f.field(sort.toString().toLowerCase()).desc()
+                )
+                .fetch(page * size, size);      // fetch single page of results
+
+
+        long totalHitCount = result.total().hitCount();
+        Pageable paging = PageRequest.of(page, size);
+
+        return new PageImpl<>(projectMapper.toDto(result.hits()), paging, totalHitCount);
+    }
+
     @Override
     public ProjectDTO save(ProjectDTO project) {
         return projectMapper.toDto(projectRepository.save(projectMapper.toEntity(project)));

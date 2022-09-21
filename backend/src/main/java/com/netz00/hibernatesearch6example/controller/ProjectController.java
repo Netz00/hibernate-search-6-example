@@ -36,7 +36,7 @@ public class ProjectController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<ProjectDTO>> searchFreelancers(
+    public ResponseEntity<Page<ProjectDTO>> searchProjects(
             @RequestParam(name = "query") @Size(min = 1, max = 15) String query,
             @RequestParam(name = "sort", required = false) ProjectSort sort,
             @RequestParam(name = "ascending", required = false, defaultValue = "true") Boolean ascending,
@@ -45,6 +45,18 @@ public class ProjectController {
     ) {
         return new ResponseEntity<>(projectService.searchProjects(query, sort, ascending, page, size), HttpStatus.OK);
     }
+
+    @GetMapping("/searchEntities")
+    public ResponseEntity<Page<ProjectDTO>> searchProjectsEntities(
+            @RequestParam(name = "query") @Size(min = 1, max = 15) String query,
+            @RequestParam(name = "sort", required = false) ProjectSort sort,
+            @RequestParam(name = "ascending", required = false, defaultValue = "true") Boolean ascending,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        return new ResponseEntity<>(projectService.searchProjectsEntities(query, sort, ascending, page, size), HttpStatus.OK);
+    }
+
 
     @PostMapping()
     public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO) {

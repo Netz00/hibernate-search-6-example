@@ -12,6 +12,8 @@ public interface ProjectService {
 
     Page<ProjectDTO> searchProjects(String query, ProjectSort sort, Boolean ascending, int page, int size);
 
+    Page<ProjectDTO> searchProjectsEntities(String query, ProjectSort sort, Boolean ascending, int page, int size);
+
     ProjectDTO save(ProjectDTO project);
 
     ProjectDTO delete(Long id);
