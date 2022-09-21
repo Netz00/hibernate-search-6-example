@@ -7,6 +7,7 @@ import com.netz00.hibernatesearch6example.dto.CategoryDTO;
 import com.netz00.hibernatesearch6example.dto.CommentDTO;
 import com.netz00.hibernatesearch6example.dto.FreelancerDTO;
 import com.netz00.hibernatesearch6example.dto.ProjectDTO;
+import com.netz00.hibernatesearch6example.model.enums.FreelancerSort;
 import com.netz00.hibernatesearch6example.services.api.FreelancerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
+import java.util.List;
 
 @RestController
 @RequestMapping(RestEndpoints.API_FREELANCER)
@@ -38,6 +41,18 @@ public class FreelancerController {
     @GetMapping(RestEndpointsParameters.FREELANCER_ID)
     public ResponseEntity<FreelancerDTO> getFreelancer(@PathVariable("id") final Long id) {
         return new ResponseEntity<>(freelancerService.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<FreelancerDTO>> searchFreelancers(
+            @RequestParam(name = "query", required = false, defaultValue = "") @Size(max = 15) String query,
+            @RequestParam(name = "sort", required = false) FreelancerSort sort,
+            @RequestParam(name = "categories", required = false) List<String> categories,
+            @RequestParam(name = "ascending", required = false, defaultValue = "true") Boolean ascending,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        return new ResponseEntity<>(freelancerService.searchCourses(query, sort, categories, ascending, page, size), HttpStatus.OK);
     }
 
     @PostMapping()

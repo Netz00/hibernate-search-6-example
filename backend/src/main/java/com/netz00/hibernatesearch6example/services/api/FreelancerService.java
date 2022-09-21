@@ -4,8 +4,11 @@ import com.netz00.hibernatesearch6example.dto.CategoryDTO;
 import com.netz00.hibernatesearch6example.dto.CommentDTO;
 import com.netz00.hibernatesearch6example.dto.FreelancerDTO;
 import com.netz00.hibernatesearch6example.dto.ProjectDTO;
+import com.netz00.hibernatesearch6example.model.enums.FreelancerSort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface FreelancerService {
 
@@ -13,6 +16,8 @@ public interface FreelancerService {
     Page<FreelancerDTO> findAll(Pageable pageable);
 
     FreelancerDTO findById(Long id);
+
+    Page<FreelancerDTO> searchCourses(String query, FreelancerSort sort, List<String> categories, Boolean ascending, int page, int size);
 
     FreelancerDTO save(FreelancerDTO category);
 
