@@ -17,7 +17,7 @@ public interface FreelancerService {
 
     FreelancerDTO findById(Long id);
 
-    Page<FreelancerDTO> searchCourses(String query, FreelancerSort sort, List<String> categories, Boolean ascending, int page, int size);
+    Page<FreelancerDTO> searchFreelancers(String query, FreelancerSort sort, List<String> categories, Boolean ascending, int page, int size);
 
     FreelancerDTO save(FreelancerDTO category);
 

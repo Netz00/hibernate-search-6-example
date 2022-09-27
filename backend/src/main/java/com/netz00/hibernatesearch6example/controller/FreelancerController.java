@@ -52,7 +52,7 @@ public class FreelancerController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size
     ) {
-        return new ResponseEntity<>(freelancerService.searchCourses(query, sort, categories, ascending, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(freelancerService.searchFreelancers(query, sort, categories, ascending, page, size), HttpStatus.OK);
     }
 
     @PostMapping()

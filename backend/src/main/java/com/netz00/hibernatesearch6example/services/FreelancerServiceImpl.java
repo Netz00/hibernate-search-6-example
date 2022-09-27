@@ -88,7 +88,7 @@ public class FreelancerServiceImpl implements FreelancerService {
      * @return
      */
     @Override
-    public Page<FreelancerDTO> searchCourses(String query, FreelancerSort sort, List<String> categoriesStrings, Boolean ascending, int page, int size) {
+    public Page<FreelancerDTO> searchFreelancers(String query, FreelancerSort sort, List<String> categoriesStrings, Boolean ascending, int page, int size) {
 
         boolean noFilter = categoriesStrings == null || categoriesStrings.isEmpty();
         boolean noQuery = query == null || query.isEmpty();
