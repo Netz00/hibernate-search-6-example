@@ -1,6 +1,6 @@
 # Hibernate Search 6 Example
 
-Simple Spring Boot application demonstrating Hibernate Search 6 usage.
+Simple Spring Boot application demonstrating Hibernate Search 6 usage with Elasticsearch.
 
 [Hibernate Search 6.1.7.Final: Reference Documentation](https://docs.jboss.org/hibernate/stable/search/reference/en-US/html_single/)
 
@@ -51,6 +51,8 @@ Run tests with the following command:
   `newman run ./backend/src/test/postman/Hibernate-search-6-example.postman_collection.json -e ./backend/src/test/postman/Test\ Environment.postman_environment.json --reporters cli,json --reporter-json-export ./backend/src/test/postman/output/outputfile.json `
 
 Import postman collection from [here](./backend/src/test/postman/Hibernate-search-6-example.postman_collection.json)
+
+Elasticsearch browser extension: https://elasticvue.com/
 
 ---
 
